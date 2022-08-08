@@ -1,7 +1,6 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +40,20 @@ public class GiftCertificateController {
         return new ModelAndView("redirect:/gifts");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable("id") int id) {
         System.out.println("delete id " + id);
         this.giftCertificateService.delete(id);
+    }
+
+    @PatchMapping("/edit/{id}")
+    public ModelAndView update(@Valid @RequestBody GiftCertificate giftCertificate,
+                                  BindingResult bindingResult, @PathVariable int id) {
+
+        System.out.println("update gift");
+        if(!bindingResult.hasErrors()){
+            this.giftCertificateService.update(giftCertificate, id);
+        }
+        return new ModelAndView("redirect:/gifts/{id}");
     }
 }

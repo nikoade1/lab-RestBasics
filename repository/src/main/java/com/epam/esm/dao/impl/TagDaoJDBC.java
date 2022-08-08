@@ -17,10 +17,10 @@ import java.util.List;
 public class TagDaoJDBC implements TagDAO {
 
     private final JdbcTemplate jdbcTemplate;
-    private final String QuerySelectTagById = "SELECT * FROM tags WHERE id =?";
-    private final String QueryDeleteTagById = "DELETE FROM tags WHERE id = ?";
-    private final String QueryInsertIntoTag = "INSERT INTO tags(name) VALUES(?)";
-    private final String QuerySelectAllTags = "SELECT * FROM tags";
+    private final String querySelectStringById = "SELECT * FROM tags WHERE id =?";
+    private final String queryDeleteStringById = "DELETE FROM tags WHERE id = ?";
+    private final String queryInsertIntoString = "INSERT INTO tags(name) VALUES(?)";
+    private final String querySelectAllTags = "SELECT * FROM tags";
 
 
     @Autowired
@@ -30,7 +30,7 @@ public class TagDaoJDBC implements TagDAO {
 
     @Override
     public Tag getTagById(int id) {
-        return jdbcTemplate.query(QuerySelectTagById,
+        return jdbcTemplate.query(querySelectStringById,
                 new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class)).stream().findAny().orElse(null);
     }
 
@@ -41,23 +41,23 @@ public class TagDaoJDBC implements TagDAO {
 
     @Override
     public void deleteTagById(int id) {
-        jdbcTemplate.update(QueryDeleteTagById, id);
+        jdbcTemplate.update(queryDeleteStringById, id);
     }
 
     @Override
-    public void createTag(Tag tag) {
+    public void createTag(Tag string) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement =
-                    con.prepareStatement(QueryInsertIntoTag, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, tag.getName());
+                    con.prepareStatement(queryInsertIntoString, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, string.getName());
             return preparedStatement;
         }, keyHolder);
     }
 
     @Override
     public List<Tag> getAllTags() {
-        return jdbcTemplate.query(QuerySelectAllTags, new BeanPropertyRowMapper<>(Tag.class));
+        return jdbcTemplate.query(querySelectAllTags, new BeanPropertyRowMapper<>(Tag.class));
     }
 
 }

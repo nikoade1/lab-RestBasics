@@ -12,5 +12,8 @@ public interface GiftCertificateDAO {
 
     void createGiftCertificate(GiftCertificate giftCertificate);
 
+    void update(GiftCertificate giftCertificate, int id);
+
     List<GiftCertificate> getAllGiftCertificates();
+
 }

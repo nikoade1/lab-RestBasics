@@ -31,13 +31,14 @@ public class TagController {
 
     @PostMapping("/create")
     public ModelAndView create(@Valid @RequestBody Tag tag, BindingResult bindingResult) {
-        if(!bindingResult.hasErrors()) this.tagService.create(tag);
+        if (!bindingResult.hasErrors()) this.tagService.create(tag);
         return new ModelAndView("redirect:/tags");
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") int id) {
+    @DeleteMapping("/delete/{id}")
+    public ModelAndView delete(@PathVariable("id") int id) {
         this.tagService.delete(id);
+        return new ModelAndView("redirect:/tags");
     }
 
 }

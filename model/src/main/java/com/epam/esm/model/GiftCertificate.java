@@ -6,31 +6,25 @@ public class GiftCertificate {
 
     private int id;
     private String name;
-    private String Description;
+    private String description;
     private double price;
     private int duration;
     private LocalDateTime create_date;
     private LocalDateTime last_update_date;
 
-    private Tag tag;
-
     public GiftCertificate() {
+        this.create_date = LocalDateTime.now();
+        this.last_update_date = this.create_date;
     }
 
-    public GiftCertificate(int id, String name, String description, double price, int duration, LocalDateTime create_date, LocalDateTime last_update_date) {
+    public GiftCertificate(int id, String name, String description, double price, int duration) {
+        this();
         this.id = id;
         this.name = name;
-        Description = description;
+        this.description = description;
         this.price = price;
         this.duration = duration;
-        this.create_date = create_date;
-        this.last_update_date = last_update_date;
-        this.tag = null;
-    }
 
-    public GiftCertificate(int id, String name, String description, double price, int duration, LocalDateTime create_date, LocalDateTime last_update_date, Tag tag) {
-        this(id, name, description, price, duration, create_date, last_update_date);
-        this.tag = tag;
     }
 
     public int getId() {
@@ -50,11 +44,11 @@ public class GiftCertificate {
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
     public double getPrice() {
@@ -63,6 +57,11 @@ public class GiftCertificate {
 
     public void setPrice(double price) {
         this.price = price;
+        updateTime();
+    }
+
+    private void updateTime() {
+        this.last_update_date = LocalDateTime.now();
     }
 
     public int getDuration() {
@@ -71,6 +70,7 @@ public class GiftCertificate {
 
     public void setDuration(int duration) {
         this.duration = duration;
+        updateTime();
     }
 
     public LocalDateTime getCreate_date() {
@@ -79,6 +79,7 @@ public class GiftCertificate {
 
     public void setCreate_date(LocalDateTime create_date) {
         this.create_date = create_date;
+        updateTime();
     }
 
     public LocalDateTime getLast_update_date() {
@@ -89,11 +90,4 @@ public class GiftCertificate {
         this.last_update_date = last_update_date;
     }
 
-    public Tag getTag() {
-        return tag;
-    }
-
-    public void setTag(Tag tag) {
-        this.tag = tag;
-    }
 }

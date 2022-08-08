@@ -1,7 +1,6 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dao.GiftCertificateDAO;
-import com.epam.esm.dao.TagDAO;
 import com.epam.esm.model.GiftCertificate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +30,9 @@ public class GiftCertificateService {
 
     public void delete(int id) {
         this.giftCertificateDAO.deleteGiftCertificateById(id);
+    }
+
+    public void update(GiftCertificate giftCertificate, int id) {
+        this.giftCertificateDAO.update(giftCertificate, id);
     }
 }

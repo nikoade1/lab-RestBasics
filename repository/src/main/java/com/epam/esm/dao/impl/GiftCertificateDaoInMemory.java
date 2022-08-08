@@ -2,14 +2,11 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class GiftCertificateInMemory implements GiftCertificateDAO {
+public class GiftCertificateDaoInMemory implements GiftCertificateDAO {
 
     private final List<GiftCertificate> giftCertificates;
 
@@ -33,6 +30,10 @@ public class GiftCertificateInMemory implements GiftCertificateDAO {
     @Override
     public void createGiftCertificate(GiftCertificate giftCertificate) {
         this.giftCertificates.add(giftCertificate);
+    }
+
+    @Override
+    public void update(GiftCertificate giftCertificate, int id) {
     }
 
     @Override

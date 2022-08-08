@@ -24,8 +24,8 @@ public class TagService {
         return tagDAO.getTagById(id);
     }
 
-    public void create(Tag tag) {
-        tagDAO.createTag(tag);
+    public void create(Tag string) {
+        tagDAO.createTag(string);
     }
 
     public void delete(int id) {
