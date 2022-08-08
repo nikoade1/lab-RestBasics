@@ -14,6 +14,8 @@ public class GiftCertificate {
 
     private Tag tag;
 
+    public GiftCertificate() {
+    }
 
     public GiftCertificate(int id, String name, String description, double price, int duration, LocalDateTime create_date, LocalDateTime last_update_date) {
         this.id = id;

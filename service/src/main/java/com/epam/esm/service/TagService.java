@@ -16,7 +16,7 @@ public class TagService {
         this.tagDAO = tagDao;
     }
 
-    public List<Tag> getTags() {
+    public List<Tag> getAllTags() {
         return tagDAO.getAllTags();
     }
 
@@ -26,10 +26,6 @@ public class TagService {
 
     public void create(Tag tag) {
         tagDAO.createTag(tag);
-    }
-
-    public Tag update(int id, Tag tag) {
-        return tagDAO.update(id, tag);
     }
 
     public void delete(int id) {

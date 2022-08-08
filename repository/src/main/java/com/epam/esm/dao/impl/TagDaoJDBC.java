@@ -5,18 +5,22 @@ import com.epam.esm.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Component
 public class TagDaoJDBC implements TagDAO {
 
     private final JdbcTemplate jdbcTemplate;
-    private final String QuerySelectTagById = "SELECT * FROM tag WHERE id =?";
-    private final String QueryDeleteTagById = "DELETE FROM tag WHERE id = ?";
-    private final String QueryInsertIntoTag = "INSERT INTO tag VALUES(1, ?)";
-    private final String QuerySelectAllTags = "SELECT * FROM tag";
+    private final String QuerySelectTagById = "SELECT * FROM tags WHERE id =?";
+    private final String QueryDeleteTagById = "DELETE FROM tags WHERE id = ?";
+    private final String QueryInsertIntoTag = "INSERT INTO tags(name) VALUES(?)";
+    private final String QuerySelectAllTags = "SELECT * FROM tags";
 
 
     @Autowired
@@ -42,7 +46,13 @@ public class TagDaoJDBC implements TagDAO {
 
     @Override
     public void createTag(Tag tag) {
-        jdbcTemplate.update(QueryInsertIntoTag, tag.getName());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement preparedStatement =
+                    con.prepareStatement(QueryInsertIntoTag, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, tag.getName());
+            return preparedStatement;
+        }, keyHolder);
     }
 
     @Override
@@ -50,8 +60,4 @@ public class TagDaoJDBC implements TagDAO {
         return jdbcTemplate.query(QuerySelectAllTags, new BeanPropertyRowMapper<>(Tag.class));
     }
 
-    @Override
-    public Tag update(int id, Tag tag) {
-        return null;
-    }
 }

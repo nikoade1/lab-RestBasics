@@ -9,7 +9,6 @@ import java.util.List;
 
 public class TagDaoInMemory implements TagDAO {
 
-    private static TagDaoInMemory db;
     private static int TAG_COUNT;
     private final List<Tag> tags;
 
@@ -47,10 +46,4 @@ public class TagDaoInMemory implements TagDAO {
         return tags;
     }
 
-    @Override
-    public Tag update(int id, Tag tag) {
-        Tag tagToBeUpdated = getTagById(id);
-        tagToBeUpdated.setName(tag.getName());
-        return tagToBeUpdated;
-    }
 }

@@ -4,6 +4,7 @@ import com.epam.esm.model.Tag;
 import com.epam.esm.service.TagService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,30 +20,24 @@ public class TagController {
     }
 
     @GetMapping()
-    public List<Tag> readAllTeg() {
-        return tagService.getTags();
+    public List<Tag> getAllTags() {
+        return this.tagService.getAllTags();
     }
 
     @GetMapping("/{id}")
-    public Tag show(@PathVariable("id") int id) {
-        return tagService.getTag(id);
+    public Tag getTag(@PathVariable("id") int id) {
+        return this.tagService.getTag(id);
     }
 
     @PostMapping("/create")
-    public Tag create(@Valid @RequestBody Tag tag, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) return null;
-        tagService.create(tag);
-        return tag;
-    }
-
-    @PatchMapping("/{id}")
-    public Tag update(@RequestBody Tag tag, @PathVariable("id") int id) {
-        return tagService.update(id, tag);
+    public ModelAndView create(@Valid @RequestBody Tag tag, BindingResult bindingResult) {
+        if(!bindingResult.hasErrors()) this.tagService.create(tag);
+        return new ModelAndView("redirect:/tags");
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") int id) {
-        tagService.delete(id);
+        this.tagService.delete(id);
     }
 
 }

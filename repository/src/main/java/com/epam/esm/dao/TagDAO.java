@@ -16,5 +16,4 @@ public interface TagDAO {
 
     List<Tag> getAllTags();
 
-    Tag update(int id, Tag tag);
 }
