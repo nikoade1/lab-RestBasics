@@ -35,6 +35,10 @@ public class TagService {
     }
 
     public List<Integer> createTagsIfNotExists(List<Tag> tags) {
-        return tags.stream().filter(tag -> tagDAO.getTagByName(tag.getName()) == null).map(tagDAO::createTag).collect(Collectors.toList());
+        System.out.println(tags);
+
+        return tags.stream().map(tag -> tagDAO.getTagByName(tag.getName())
+                        == null ? tagDAO.createTag(tag) : tagDAO.getTagIdByTagName(tag.getName()))
+                .collect(Collectors.toList());
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import java.util.List;
 
 
@@ -39,8 +38,9 @@ public class GiftCertificateController {
         return this.giftCertificateService.getGiftCertificateById(id);
     }
 
+
     @PostMapping("/create")
-    public ModelAndView create(@Valid @RequestBody WrapperGiftTags requestWrapper, BindingResult bindingResult) {
+    public ModelAndView create(@RequestBody WrapperGiftTags requestWrapper, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             int giftCertificateId = this.giftCertificateService.create(requestWrapper.getGiftCertificate());
             List<Tag> tags = requestWrapper.getTags();
@@ -58,13 +58,27 @@ public class GiftCertificateController {
     }
 
     @PatchMapping("/edit/{id}")
-    public ModelAndView update(@Valid @RequestBody WrapperGiftTags requestWrapper,
+    public ModelAndView update(@RequestBody WrapperGiftTags requestWrapper,
                                BindingResult bindingResult, @PathVariable int id) {
 
         if (!bindingResult.hasErrors()) {
-            this.tagService.createTagsIfNotExists(requestWrapper.getTags());
-            this.giftCertificateService.update(requestWrapper.getGiftCertificate(), id);
+            List<Tag> tags = requestWrapper.getTags();
+            int giftCertificateId = this.giftCertificateService.update(requestWrapper.getGiftCertificate(), id);
+            if (tags != null) {
+                List<Integer> tagIds = this.tagService.createTagsIfNotExists(tags);
+                this.wrapperService.createRecord(giftCertificateId, tagIds);
+            }
         }
         return new ModelAndView("redirect:/gifts/{id}");
+    }
+
+    @GetMapping("/getByTagName/{tagName}")
+    public List<GiftCertificate> getGiftCertificatesByTagName(@PathVariable("tagName") String tagName) {
+        return this.wrapperService.getGiftCertificatesByTagName(tagName);
+    }
+
+    @GetMapping("/getByTagNameSubstring/{tagNameSubstring}")
+    public List<GiftCertificate> getGiftCertificatesByTagNameSubstring(@PathVariable("tagNameSubstring") String tagNameSubstring) {
+        return this.wrapperService.getGiftCertificatesByTagNameSubstring(tagNameSubstring);
     }
 }

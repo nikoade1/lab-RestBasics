@@ -26,6 +26,13 @@ public class TagDaoInMemory implements TagDAO {
     }
 
     @Override
+    public int getTagIdByTagName(String name) {
+        Tag found = tags.stream().filter(tag -> tag.getName().equals(name)).findAny().orElse(null);
+        if (found == null) return 0;
+        return found.getId();
+    }
+
+    @Override
     public Tag getTagByName(String name) {
         return tags.stream().filter(tag -> tag.getName().equals(name)).findAny().orElse(null);
     }

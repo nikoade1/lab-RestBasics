@@ -13,7 +13,6 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class GiftCertificateDaoJDBC implements GiftCertificateDAO {
@@ -29,6 +28,7 @@ public class GiftCertificateDaoJDBC implements GiftCertificateDAO {
             "name=?, description=?, price=?, duration=?, last_update_date=? WHERE id=?";
 
     private final String QueryDeleteGiftCertificateById = "DELETE FROM gift_certificates WHERE id=?";
+    private final String QueryDeleteGiftRecordsById = "DELETE FROM gifts_to_tags WHERE gift_certificate_id=?";
     private final String QueryGetGiftCertificateById = "SELECT * FROM gift_certificates WHERE id=?";
 
     @Autowired
@@ -44,6 +44,7 @@ public class GiftCertificateDaoJDBC implements GiftCertificateDAO {
 
     @Override
     public void deleteGiftCertificateById(int id) {
+        jdbcTemplate.update(QueryDeleteGiftRecordsById, id);
         jdbcTemplate.update(QueryDeleteGiftCertificateById, id);
     }
 
