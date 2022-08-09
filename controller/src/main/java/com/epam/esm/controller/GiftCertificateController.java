@@ -1,7 +1,9 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.model.WrapperGiftTags;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.TagService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,44 +17,46 @@ import java.util.List;
 public class GiftCertificateController {
 
     private final GiftCertificateService giftCertificateService;
+    private final TagService tagService;
 
-    public GiftCertificateController(GiftCertificateService giftCertificateService) {
+    public GiftCertificateController(GiftCertificateService giftCertificateService,
+                                     TagService tagService) {
         this.giftCertificateService = giftCertificateService;
+        this.tagService = tagService;
     }
 
     @GetMapping()
     public List<GiftCertificate> getAllGiftCertificates() {
-        System.out.println("get all");
         return this.giftCertificateService.getAllGiftCertificates();
     }
 
     @GetMapping("/{id}")
-    public GiftCertificate getGiftCertificate(@PathVariable("id") int id){
-        System.out.println("get by id " + id);
+    public GiftCertificate getGiftCertificate(@PathVariable("id") int id) {
         return this.giftCertificateService.getGiftCertificateById(id);
     }
 
     @PostMapping("/create")
-    public ModelAndView create(@Valid @RequestBody GiftCertificate giftCertificate, BindingResult bindingResult) {
-        System.out.println("create gift");
-        if(!bindingResult.hasErrors())
-            this.giftCertificateService.create(giftCertificate);
+    public ModelAndView create(@Valid @RequestBody WrapperGiftTags requestWrapper, BindingResult bindingResult) {
+        if (!bindingResult.hasErrors()) {
+            this.tagService.createTagsIfNotExists(requestWrapper.getTags());
+            this.giftCertificateService.create(requestWrapper.getGiftCertificate());
+
+        }
         return new ModelAndView("redirect:/gifts");
     }
 
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable("id") int id) {
-        System.out.println("delete id " + id);
         this.giftCertificateService.delete(id);
     }
 
     @PatchMapping("/edit/{id}")
-    public ModelAndView update(@Valid @RequestBody GiftCertificate giftCertificate,
-                                  BindingResult bindingResult, @PathVariable int id) {
+    public ModelAndView update(@Valid @RequestBody WrapperGiftTags requestWrapper,
+                               BindingResult bindingResult, @PathVariable int id) {
 
-        System.out.println("update gift");
-        if(!bindingResult.hasErrors()){
-            this.giftCertificateService.update(giftCertificate, id);
+        if (!bindingResult.hasErrors()) {
+            this.tagService.createTagsIfNotExists(requestWrapper.getTags());
+            this.giftCertificateService.update(requestWrapper.getGiftCertificate(), id);
         }
         return new ModelAndView("redirect:/gifts/{id}");
     }

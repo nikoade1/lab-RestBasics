@@ -17,10 +17,11 @@ import java.util.List;
 public class TagDaoJDBC implements TagDAO {
 
     private final JdbcTemplate jdbcTemplate;
-    private final String querySelectStringById = "SELECT * FROM tags WHERE id =?";
-    private final String queryDeleteStringById = "DELETE FROM tags WHERE id = ?";
-    private final String queryInsertIntoString = "INSERT INTO tags(name) VALUES(?)";
-    private final String querySelectAllTags = "SELECT * FROM tags";
+    private final String QuerySelectStringById = "SELECT * FROM tags WHERE id =?";
+    private final String QueryDeleteStringById = "DELETE FROM tags WHERE id = ?";
+    private final String QueryInsertIntoString = "INSERT INTO tags(name) VALUES(?)";
+    private final String QuerySelectAllTags = "SELECT * FROM tags";
+    private final String QuerySelectStringByName = "SELECT * FROM tags WHERE name =?";
 
 
     @Autowired
@@ -30,18 +31,19 @@ public class TagDaoJDBC implements TagDAO {
 
     @Override
     public Tag getTagById(int id) {
-        return jdbcTemplate.query(querySelectStringById,
+        return jdbcTemplate.query(QuerySelectStringById,
                 new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class)).stream().findAny().orElse(null);
     }
 
     @Override
     public Tag getTagByName(String name) {
-        return null;
+        return jdbcTemplate.query(QuerySelectStringByName,
+                new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class)).stream().findAny().orElse(null);
     }
 
     @Override
     public void deleteTagById(int id) {
-        jdbcTemplate.update(queryDeleteStringById, id);
+        jdbcTemplate.update(QueryDeleteStringById, id);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class TagDaoJDBC implements TagDAO {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement =
-                    con.prepareStatement(queryInsertIntoString, Statement.RETURN_GENERATED_KEYS);
+                    con.prepareStatement(QueryInsertIntoString, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, string.getName());
             return preparedStatement;
         }, keyHolder);
@@ -57,7 +59,7 @@ public class TagDaoJDBC implements TagDAO {
 
     @Override
     public List<Tag> getAllTags() {
-        return jdbcTemplate.query(querySelectAllTags, new BeanPropertyRowMapper<>(Tag.class));
+        return jdbcTemplate.query(QuerySelectAllTags, new BeanPropertyRowMapper<>(Tag.class));
     }
 
 }

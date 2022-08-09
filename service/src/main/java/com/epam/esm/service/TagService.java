@@ -4,6 +4,7 @@ import com.epam.esm.dao.TagDAO;
 import com.epam.esm.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -30,5 +31,9 @@ public class TagService {
 
     public void delete(int id) {
         tagDAO.deleteTagById(id);
+    }
+
+    public void createTagsIfNotExists(List<Tag> tags) {
+        tags.stream().filter(tag -> tagDAO.getTagByName(tag.getName()) == null).forEach(tagDAO::createTag);
     }
 }

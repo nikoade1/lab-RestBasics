@@ -48,7 +48,6 @@ public class GiftCertificateDaoJDBC implements GiftCertificateDAO {
 
     @Override
     public void createGiftCertificate(GiftCertificate giftCertificate) {
-        System.out.println("hello");
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement =
@@ -67,9 +66,9 @@ public class GiftCertificateDaoJDBC implements GiftCertificateDAO {
     public void update(GiftCertificate giftCertificate, int id) {
 
         GiftCertificate inDB = getGiftCertificateById(id);
-        if(inDB == null) return;
+        if (inDB == null) return;
 
-        jdbcTemplate.update(QueryUpdateGiftCertificateById, 
+        jdbcTemplate.update(QueryUpdateGiftCertificateById,
                 giftCertificate.getName() == null ? inDB.getName() : giftCertificate.getName(),
                 giftCertificate.getDescription() == null ? inDB.getDescription() : giftCertificate.getDescription(),
                 giftCertificate.getPrice() == 0 ? inDB.getPrice() : giftCertificate.getPrice(),
