@@ -25,15 +25,15 @@ public class GiftCertificateService {
         return this.giftCertificateDAO.getGiftCertificateById(id);
     }
 
-    public void create(GiftCertificate giftCertificate) {
-        this.giftCertificateDAO.createGiftCertificate(giftCertificate);
+    public int create(GiftCertificate giftCertificate) {
+        return this.giftCertificateDAO.createGiftCertificate(giftCertificate);
     }
 
     public void delete(int id) {
         this.giftCertificateDAO.deleteGiftCertificateById(id);
     }
 
-    public void update(GiftCertificate giftCertificate, int id) {
-        this.giftCertificateDAO.update(giftCertificate, id);
+    public int update(GiftCertificate giftCertificate, int id) {
+        return this.giftCertificateDAO.update(giftCertificate, id);
     }
 }

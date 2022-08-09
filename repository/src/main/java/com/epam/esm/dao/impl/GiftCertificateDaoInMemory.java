@@ -28,12 +28,14 @@ public class GiftCertificateDaoInMemory implements GiftCertificateDAO {
     }
 
     @Override
-    public void createGiftCertificate(GiftCertificate giftCertificate) {
+    public int createGiftCertificate(GiftCertificate giftCertificate) {
         this.giftCertificates.add(giftCertificate);
+        return giftCertificate.getId();
     }
 
     @Override
-    public void update(GiftCertificate giftCertificate, int id) {
+    public int update(GiftCertificate giftCertificate, int id) {
+        return 0;
     }
 
     @Override

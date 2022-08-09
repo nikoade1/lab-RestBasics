@@ -47,14 +47,16 @@ public class TagDaoJDBC implements TagDAO {
     }
 
     @Override
-    public void createTag(Tag string) {
+    public int createTag(Tag tag) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement =
                     con.prepareStatement(QueryInsertIntoString, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, string.getName());
+            preparedStatement.setString(1, tag.getName());
             return preparedStatement;
         }, keyHolder);
+
+        return (int) keyHolder.getKeys().get("id");
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TagService {
@@ -25,15 +26,15 @@ public class TagService {
         return tagDAO.getTagById(id);
     }
 
-    public void create(Tag string) {
-        tagDAO.createTag(string);
+    public int create(Tag tag) {
+        return tagDAO.createTag(tag);
     }
 
     public void delete(int id) {
         tagDAO.deleteTagById(id);
     }
 
-    public void createTagsIfNotExists(List<Tag> tags) {
-        tags.stream().filter(tag -> tagDAO.getTagByName(tag.getName()) == null).forEach(tagDAO::createTag);
+    public List<Integer> createTagsIfNotExists(List<Tag> tags) {
+        return tags.stream().filter(tag -> tagDAO.getTagByName(tag.getName()) == null).map(tagDAO::createTag).collect(Collectors.toList());
     }
 }

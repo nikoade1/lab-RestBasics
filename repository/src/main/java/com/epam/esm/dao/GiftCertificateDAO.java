@@ -10,9 +10,9 @@ public interface GiftCertificateDAO {
 
     void deleteGiftCertificateById(int id);
 
-    void createGiftCertificate(GiftCertificate giftCertificate);
+    int createGiftCertificate(GiftCertificate giftCertificate);
 
-    void update(GiftCertificate giftCertificate, int id);
+    int update(GiftCertificate giftCertificate, int id);
 
     List<GiftCertificate> getAllGiftCertificates();
 

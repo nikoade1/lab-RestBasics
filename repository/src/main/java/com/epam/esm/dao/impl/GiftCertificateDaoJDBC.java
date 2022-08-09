@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class GiftCertificateDaoJDBC implements GiftCertificateDAO {
@@ -47,7 +48,7 @@ public class GiftCertificateDaoJDBC implements GiftCertificateDAO {
     }
 
     @Override
-    public void createGiftCertificate(GiftCertificate giftCertificate) {
+    public int createGiftCertificate(GiftCertificate giftCertificate) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement =
@@ -60,13 +61,15 @@ public class GiftCertificateDaoJDBC implements GiftCertificateDAO {
             preparedStatement.setTimestamp(6, Timestamp.valueOf(giftCertificate.getLast_update_date()));
             return preparedStatement;
         }, keyHolder);
+
+        return (int) keyHolder.getKeys().get("id");
     }
 
     @Override
-    public void update(GiftCertificate giftCertificate, int id) {
+    public int update(GiftCertificate giftCertificate, int id) {
 
         GiftCertificate inDB = getGiftCertificateById(id);
-        if (inDB == null) return;
+        if (inDB == null) return 0;
 
         jdbcTemplate.update(QueryUpdateGiftCertificateById,
                 giftCertificate.getName() == null ? inDB.getName() : giftCertificate.getName(),
@@ -75,6 +78,8 @@ public class GiftCertificateDaoJDBC implements GiftCertificateDAO {
                 giftCertificate.getDuration() == 0 ? inDB.getDuration() : giftCertificate.getDuration(),
                 Timestamp.valueOf(LocalDateTime.now()),
                 id);
+
+        return id;
     }
 
     @Override

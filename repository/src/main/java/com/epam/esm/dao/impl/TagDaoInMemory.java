@@ -10,40 +10,41 @@ import java.util.List;
 public class TagDaoInMemory implements TagDAO {
 
     private static int TAG_COUNT;
-    private final List<Tag> strings;
+    private final List<Tag> tags;
 
     {
-        strings = new ArrayList<>();
-        strings.add(new Tag(++TAG_COUNT, "birthday"));
-        strings.add(new Tag(++TAG_COUNT, "christmas"));
-        strings.add(new Tag(++TAG_COUNT, "welcome party"));
-        strings.add(new Tag(++TAG_COUNT, "Kaladzis gacileba"));
+        tags = new ArrayList<>();
+        tags.add(new Tag(++TAG_COUNT, "birthday"));
+        tags.add(new Tag(++TAG_COUNT, "christmas"));
+        tags.add(new Tag(++TAG_COUNT, "welcome party"));
+        tags.add(new Tag(++TAG_COUNT, "Kaladze send-off"));
     }
 
     @Override
     public Tag getTagById(int id) {
-        return strings.stream().filter(tag -> tag.getId() == id).findAny().orElse(null);
+        return tags.stream().filter(tag -> tag.getId() == id).findAny().orElse(null);
     }
 
     @Override
     public Tag getTagByName(String name) {
-        return strings.stream().filter(tag -> tag.getName().equals(name)).findAny().orElse(null);
+        return tags.stream().filter(tag -> tag.getName().equals(name)).findAny().orElse(null);
     }
 
     @Override
     public void deleteTagById(int id) {
-        strings.removeIf(tag -> tag.getId() == id);
+        tags.removeIf(tag -> tag.getId() == id);
     }
 
     @Override
-    public void createTag(Tag string) {
-        string.setId(++TAG_COUNT);
-        strings.add(string);
+    public int createTag(Tag tag) {
+        tag.setId(++TAG_COUNT);
+        tags.add(tag);
+        return tag.getId();
     }
 
     @Override
     public List<Tag> getAllTags() {
-        return strings;
+        return tags;
     }
 
 }

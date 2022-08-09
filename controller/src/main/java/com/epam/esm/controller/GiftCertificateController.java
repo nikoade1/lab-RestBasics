@@ -1,9 +1,11 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.model.Tag;
 import com.epam.esm.model.WrapperGiftTags;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.TagService;
+import com.epam.esm.service.WrapperGiftTagsService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,11 +20,13 @@ public class GiftCertificateController {
 
     private final GiftCertificateService giftCertificateService;
     private final TagService tagService;
+    private final WrapperGiftTagsService wrapperService;
 
     public GiftCertificateController(GiftCertificateService giftCertificateService,
-                                     TagService tagService) {
+                                     TagService tagService, WrapperGiftTagsService wrapperService) {
         this.giftCertificateService = giftCertificateService;
         this.tagService = tagService;
+        this.wrapperService = wrapperService;
     }
 
     @GetMapping()
@@ -38,9 +42,12 @@ public class GiftCertificateController {
     @PostMapping("/create")
     public ModelAndView create(@Valid @RequestBody WrapperGiftTags requestWrapper, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            this.tagService.createTagsIfNotExists(requestWrapper.getTags());
-            this.giftCertificateService.create(requestWrapper.getGiftCertificate());
-
+            int giftCertificateId = this.giftCertificateService.create(requestWrapper.getGiftCertificate());
+            List<Tag> tags = requestWrapper.getTags();
+            if (tags != null) {
+                List<Integer> tagIds = this.tagService.createTagsIfNotExists(tags);
+                this.wrapperService.createRecord(giftCertificateId, tagIds);
+            }
         }
         return new ModelAndView("redirect:/gifts");
     }
