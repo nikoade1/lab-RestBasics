@@ -13,7 +13,8 @@ public class WrapperGiftTagsDaoJDBC implements WrapperGiftTagsDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final String QueryCreateRecord = "INSERT INTO gifts_to_tags VALUES(?, ?)";
+    private final String QueryCreateRecord = "INSERT INTO gifts_to_tags VALUES(?, ?) " +
+            "ON CONFLICT DO NOTHING;";
     private final String QuerySelectGiftCertificatesByTagName
             = "SELECT * FROM gift_certificates as gc JOIN gifts_to_tags as gtt " +
             "on gc.id = gtt.gift_certificate_id JOIN tags on gtt.tag_id = tags.id " +

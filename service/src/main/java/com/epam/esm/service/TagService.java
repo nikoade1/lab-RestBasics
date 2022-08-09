@@ -35,8 +35,6 @@ public class TagService {
     }
 
     public List<Integer> createTagsIfNotExists(List<Tag> tags) {
-        System.out.println(tags);
-
         return tags.stream().map(tag -> tagDAO.getTagByName(tag.getName())
                         == null ? tagDAO.createTag(tag) : tagDAO.getTagIdByTagName(tag.getName()))
                 .collect(Collectors.toList());
